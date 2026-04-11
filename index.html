@@ -1,56 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dice Roller App</title>
-  </head>
-  <body>
-    <div id="app">
-      <div class="container">
-        <h1>Dice Roller - Audience Engagement</h1>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dice Roller — Audience Engagement</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div id="app">
+            <div class="container">
+                <header class="app-header">
+                    <span class="app-icon">🎲</span>
+                    <div class="app-title-group">
+                        <h1>Dice Roller</h1>
+                        <p class="subtitle">Audience Engagement</p>
+                    </div>
+                </header>
 
-        <!-- Name Entry Section -->
-        <div id="name-entry-section" class="section">
-          <div class="input-group">
-            <input
-              type="text"
-              id="name-input"
-              placeholder="Enter participant name"
-            />
-            <button id="add-name-btn">Add Name</button>
-          </div>
+                <!-- Name Entry Section -->
+                <div id="name-entry-section" class="section">
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="name-input"
+                            placeholder="Enter participant name..."
+                            autocomplete="off"
+                        />
+                        <button id="add-name-btn">+ Add</button>
+                    </div>
 
-          <div id="participants-list">
-            <h3>Participants:</h3>
-            <ul id="names-list"></ul>
-          </div>
+                    <div id="participants-list">
+                        <div class="participants-header">
+                            <h3>Participants</h3>
+                            <span id="participants-count" class="count-badge"
+                                >0</span
+                            >
+                        </div>
+                        <ul id="names-list"></ul>
+                    </div>
 
-          <button id="start-game-btn" class="start-btn" disabled>
-            Start Game
-          </button>
-        </div>
+                    <button id="start-game-btn" class="start-btn" disabled>
+                        Start Game →
+                    </button>
+                </div>
 
-        <!-- Dice Rolling Section -->
-        <div id="dice-section" class="section hidden">
-          <div class="dice-container">
-            <div id="dice" class="dice">
-              <div class="dice-face">?</div>
+                <!-- Dice Rolling Section -->
+                <div id="dice-section" class="section hidden">
+                    <div id="pool-info" class="pool-info"></div>
+
+                    <div class="dice-container">
+                        <div id="dice" class="dice">
+                            <div class="dice-face">?</div>
+                        </div>
+                    </div>
+
+                    <button id="roll-dice-btn" class="roll-btn">
+                        🎲 Roll the Dice!
+                    </button>
+
+                    <div id="result" class="result"></div>
+
+                    <button id="reset-game-btn" class="reset-btn">
+                        ← Add More Participants
+                    </button>
+                </div>
             </div>
-          </div>
-
-          <button id="roll-dice-btn" class="roll-btn">Roll Dice</button>
-
-          <div id="result" class="result"></div>
-
-          <button id="reset-game-btn" class="reset-btn">
-            Add More Participants
-          </button>
         </div>
-      </div>
-    </div>
 
-    <script type="module" src="src/main.js"></script>
-  </body>
+        <script type="module" src="src/main.js"></script>
+    </body>
 </html>
