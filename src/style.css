@@ -86,10 +86,6 @@ h1 {
 }
 
 /* ─── Sections ──────────────────────────────────────────────── */
-.section {
-    /* intentionally bare */
-}
-
 .hidden {
     display: none;
 }
@@ -364,6 +360,13 @@ h1 {
     padding: 2px 7px;
     font-size: 0.72rem;
     font-weight: 600;
+}
+
+.pool-chip--excluded {
+    background: #e8e8e8;
+    border: 2px dashed var(--black);
+    text-decoration: line-through;
+    opacity: 0.5;
 }
 
 /* ─── Dice ──────────────────────────────────────────────────── */

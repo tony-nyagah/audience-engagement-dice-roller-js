@@ -3,6 +3,7 @@ import "./style.css";
 class DiceRoller {
   constructor() {
     this.participants = [];
+    this.lastSelectedIndex = null;
     this.initializeElements();
     this.bindEvents();
   }
@@ -79,16 +80,38 @@ class DiceRoller {
     this.updatePoolInfo();
   }
 
+  /** Returns the indices that are eligible to be picked this roll. */
+  getEligibleIndices() {
+    const canExclude =
+      this.lastSelectedIndex !== null && this.participants.length > 1;
+
+    return this.participants.reduce((acc, _, i) => {
+      if (!canExclude || i !== this.lastSelectedIndex) acc.push(i);
+      return acc;
+    }, []);
+  }
+
   updatePoolInfo() {
     const poolInfo = document.getElementById("pool-info");
     if (!poolInfo) return;
 
+    const canExclude =
+      this.lastSelectedIndex !== null && this.participants.length > 1;
+    const eligibleCount = canExclude
+      ? this.participants.length - 1
+      : this.participants.length;
+
     const chips = this.participants
-      .map((name) => `<span class="pool-chip">${name}</span>`)
+      .map((name, index) => {
+        const isExcluded = canExclude && index === this.lastSelectedIndex;
+        return isExcluded
+          ? `<span class="pool-chip pool-chip--excluded" title="Can't be picked this roll">${name}</span>`
+          : `<span class="pool-chip">${name}</span>`;
+      })
       .join("");
 
     poolInfo.innerHTML = `
-      <span class="pool-info-label">Pool (${this.participants.length})</span>
+      <span class="pool-info-label">Pool (${eligibleCount} eligible)</span>
       <div class="pool-chips">${chips}</div>
     `;
   }
@@ -102,27 +125,33 @@ class DiceRoller {
     this.result.innerHTML = "";
 
     let counter = 0;
+    const eligibleIndices = this.getEligibleIndices();
+
     const rollInterval = setInterval(() => {
-      const randomNum =
-        Math.floor(Math.random() * this.participants.length) + 1;
-      this.dice.querySelector(".dice-face").textContent = randomNum;
+      // Flash a random eligible participant's number during the animation
+      const randomPos = Math.floor(Math.random() * eligibleIndices.length);
+      this.dice.querySelector(".dice-face").textContent =
+        eligibleIndices[randomPos] + 1;
       counter++;
 
       if (counter > 10) {
         clearInterval(rollInterval);
-        this.finalizeDiceRoll();
+        this.finalizeDiceRoll(eligibleIndices);
       }
     }, 100);
   }
 
-  finalizeDiceRoll() {
-    const finalNumber =
-      Math.floor(Math.random() * this.participants.length) + 1;
-    const selectedParticipant = this.participants[finalNumber - 1];
+  finalizeDiceRoll(eligibleIndices) {
+    const randomPos = Math.floor(Math.random() * eligibleIndices.length);
+    const finalIndex = eligibleIndices[randomPos];
+    const finalNumber = finalIndex + 1;
+    const selectedParticipant = this.participants[finalIndex];
 
     this.dice.querySelector(".dice-face").textContent = finalNumber;
     this.dice.classList.remove("rolling");
     this.dice.classList.add("winner");
+
+    this.lastSelectedIndex = finalIndex;
 
     this.result.innerHTML = `
       <div class="result-card">
@@ -132,6 +161,7 @@ class DiceRoller {
       </div>
     `;
 
+    this.updatePoolInfo();
     this.createConfetti();
     this.rollDiceBtn.disabled = false;
   }
@@ -176,6 +206,7 @@ class DiceRoller {
     this.dice.querySelector(".dice-face").textContent = "?";
     this.dice.classList.remove("rolling", "winner");
     this.result.innerHTML = "";
+    this.lastSelectedIndex = null;
   }
 }
 
